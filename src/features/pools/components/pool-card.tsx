@@ -47,7 +47,7 @@ export function PoolCard({ v, mode }: { v: PoolView; mode: "mine" | "open" }) {
         </div>
       ) : (
         <div className="mt-3 flex items-center gap-2">
-          <Input type="number" min={Number(p.minPledgeUsd)} value={amount} onChange={(e) => setAmount(e.target.value)} className="w-32" />
+          <Input aria-label="Pledge amount (USD)" type="number" min={Number(p.minPledgeUsd)} value={amount} onChange={(e) => setAmount(e.target.value)} className="w-32" />
           <Button onClick={() => (Number(amount) >= Number(p.minPledgeUsd) ? setPay(true) : toast.error(`Minimum ${usd(p.minPledgeUsd)}`))}>Pledge</Button>
           <span className="text-[11px] text-muted-foreground">min {usd(p.minPledgeUsd)}</span>
         </div>

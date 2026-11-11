@@ -201,7 +201,7 @@ export function ChartWorkspace({ usage }: { usage: { used: number; limit: number
           </Tabs>
           <form className="flex items-center gap-1.5 border-t p-2" onSubmit={(e) => { e.preventDefault(); const f = new FormData(e.currentTarget); ask(String(f.get("q") ?? "")); e.currentTarget.reset(); }}>
             {["Entry", "Trend", "Risk", "Key Levels"].map((q) => <button type="button" key={q} onClick={() => ask(q.replace("Key Levels", "levels"))} className="rounded bg-muted px-1.5 py-1 text-[11px] font-semibold">{q}</button>)}
-            <Input name="q" placeholder="Ask AI Copilot…" className="h-7 text-xs" autoComplete="off" />
+            <Input aria-label="Ask AI Copilot" name="q" placeholder="Ask AI Copilot…" className="h-7 text-xs" autoComplete="off" />
           </form>
         </div>
       </div>
