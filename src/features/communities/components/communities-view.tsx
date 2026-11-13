@@ -19,13 +19,18 @@ import { usernameSchema } from "../schemas";
 type Row = { community: { id: string; name: string; description: string; type: "public" | "private"; monthlyPriceUsd: string | null }; status: string | null };
 type Tab = "mine" | "discover" | "profile";
 
+/** Champ avec préfixe « @ » : transmet id / aria-* (injectés par Field) à l'<input>, pas au conteneur. */
+function HandleInput(props: React.ComponentProps<typeof Input>) {
+  return <div className="relative"><span aria-hidden="true" className="absolute left-2.5 top-1.5 text-sm text-muted-foreground">@</span><Input className="pl-6" {...props} /></div>;
+}
+
 function ProfileForm({ username }: { username: string }) {
   const { form, onSubmit, pending } = useActionForm(usernameSchema, updateUsername, { defaultValues: { username }, keepValues: true });
   return (
     <form onSubmit={onSubmit} className="mx-auto max-w-md space-y-4 rounded-xl border bg-card p-5">
       <div><h3 className="font-bold">Chat Profile Settings</h3><p className="text-xs text-muted-foreground">Manage your handle identity for in-app communities</p></div>
       <Field label="Unique username" error={form.formState.errors.username?.message as string} hint="Your handle identifier across chats (e.g. @trader_gold)">
-        <div className="relative"><span className="absolute left-2.5 top-1.5 text-sm text-muted-foreground">@</span><Input className="pl-6" {...form.register("username")} /></div>
+        <HandleInput autoComplete="off" {...form.register("username")} />
       </Field>
       <Button type="submit" disabled={pending}>Save Profile Settings</Button>
     </form>
@@ -46,7 +51,7 @@ export function CommunitiesView({ rows, username }: { rows: Row[]; username: str
     <div className="space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
         {tab !== "profile" ? (
-          <div className="relative w-full max-w-xs"><Search className="absolute left-2.5 top-2 size-4 text-muted-foreground" /><Input className="pl-8" placeholder="Search communities by name..." value={q} onChange={(e) => setQ(e.target.value)} /></div>
+          <div className="relative w-full max-w-xs"><Search className="absolute left-2.5 top-2 size-4 text-muted-foreground" /><Input aria-label="Search communities by name" className="pl-8" placeholder="Search communities by name..." value={q} onChange={(e) => setQ(e.target.value)} /></div>
         ) : <span />}
         <div className="flex rounded-lg border bg-card p-0.5 text-xs font-semibold">
           {([["mine", "My Channels"], ["discover", "Discover"], ["profile", "Profile Settings"]] as const).map(([k, l]) => (
