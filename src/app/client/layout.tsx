@@ -4,7 +4,7 @@ import { requireUser } from "@/features/auth/server/current-user";
 import { NotificationBell } from "@/features/notifications/components/notification-bell";
 import { listNotifications } from "@/features/notifications/server/queries";
 import { PaymentSettingsProvider } from "@/features/payments/components/payment-settings";
-import { getSettings } from "@/features/settings/queries";
+import { getSettings, parsePaymentMethods } from "@/features/settings/queries";
 import { SupportWidget } from "@/features/support/components/support-widget";
 
 /** Zone privée : jamais indexée. */
@@ -24,7 +24,7 @@ export default async function ClientLayout({ children }: LayoutProps<"/client">)
   const user = await requireUser();
   const [settings, notifs] = await Promise.all([getSettings(), listNotifications(user.id)]);
   return (
-    <PaymentSettingsProvider value={{ usdtAddress: settings.usdtAddress, usdtNetwork: settings.usdtNetwork }}>
+    <PaymentSettingsProvider value={{ methods: parsePaymentMethods(settings.paymentMethods) }}>
       <AppShell
         nav={user.role === "admin" ? [...NAV, { href: "/operator", label: "Operator Console", icon: "dashboard" }] : NAV}
         user={{ name: user.name, handle: user.username ?? "user" }}

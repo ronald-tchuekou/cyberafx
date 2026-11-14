@@ -1,8 +1,8 @@
 "use client";
 import { createContext, useContext } from "react";
+import type { PaymentMethod } from "@/features/settings/schemas";
 
-type Ctx = { usdtAddress: string; usdtNetwork: string };
-const PaymentSettingsContext = createContext<Ctx>({ usdtAddress: "", usdtNetwork: "TRC20" });
+const PaymentSettingsContext = createContext<{ methods: PaymentMethod[] }>({ methods: [] });
 
 export const PaymentSettingsProvider = PaymentSettingsContext.Provider;
 export const usePaymentSettings = () => useContext(PaymentSettingsContext);
