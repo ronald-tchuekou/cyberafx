@@ -9,6 +9,7 @@ import { durationLabel, usd } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import { LEGAL_PAGES } from "@/features/legal/data";
 import { FAQ, FEATURES, MYFXBOOK, RISK_WARNING, STATS, STEPS, TICKER } from "../data";
+import { parseLandingGrid } from "@/features/settings/queries";
 import { LandingJsonLd } from "./json-ld";
 
 type S = typeof SETTING_DEFAULTS;
@@ -33,6 +34,7 @@ function Ticker() {
 }
 
 export function LandingPage({ signals, packages, settings, signedIn }: { signals: Signal[]; packages: Package[]; settings: S; signedIn: boolean }) {
+  const grid = parseLandingGrid(settings.landingGrid);
   const portal = signedIn ? "/client" : "/auth";
   const signalPlans = packages.filter((p) => p.kind === "signal");
   const mentorPlans = packages.filter((p) => p.kind === "mentorship");
@@ -135,6 +137,22 @@ export function LandingPage({ signals, packages, settings, signedIn }: { signals
           {FEATURES.map(([t, d, e]) => <div key={t} className="rounded-2xl border bg-card p-5"><span aria-hidden="true" className="text-2xl">{e}</span><h3 className="mt-3 text-sm font-bold">{t}</h3><p className="mt-2 text-xs text-muted-foreground">{d}</p></div>)}
         </div>
       </section>
+
+      {grid.items.length > 0 && (
+        <section aria-labelledby="grid-title" className="mx-auto max-w-6xl px-4 pb-20">
+          {grid.title && <h2 id="grid-title" className={h2}>{grid.title}</h2>}
+          {grid.subtitle && <p className="mt-2 text-muted-foreground">{grid.subtitle}</p>}
+          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {grid.items.map((it, i) => (
+              <figure key={i} className="overflow-hidden rounded-2xl border bg-card">
+                {/* eslint-disable-next-line @next/next/no-img-element -- URL https libre saisie par l'admin */}
+                <img src={it.imageUrl} alt={it.title} loading="lazy" className="aspect-video w-full object-cover" />
+                <figcaption className="p-4"><h3 className="text-sm font-bold">{it.title}</h3>{it.text && <p className="mt-1 text-xs text-muted-foreground">{it.text}</p>}</figcaption>
+              </figure>
+            ))}
+          </div>
+        </section>
+      )}
 
       <section className="mx-auto max-w-6xl px-4 pb-20">
         <p className={eyebrow}>Process flow</p>

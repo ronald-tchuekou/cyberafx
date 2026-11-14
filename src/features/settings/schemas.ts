@@ -23,3 +23,14 @@ export type PaymentMethod = z.infer<typeof paymentMethodSchema>;
 export const paymentMethodsSchema = z.object({
   methods: z.array(paymentMethodSchema).min(1, "Au moins un moyen de paiement"),
 });
+
+export const landingGridSchema = z.object({
+  title: z.string().trim().max(80),
+  subtitle: z.string().trim().max(200),
+  items: z.array(z.object({
+    imageUrl: httpsUrl,
+    title: z.string().trim().min(1, "Titre requis").max(60),
+    text: z.string().trim().max(300),
+  })).max(12, "12 blocs maximum"),
+});
+export type LandingGrid = z.infer<typeof landingGridSchema>;
