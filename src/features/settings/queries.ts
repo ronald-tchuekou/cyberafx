@@ -1,7 +1,7 @@
 import "server-only";
 import { db, settings } from "@/db";
 import { cachedPublic } from "@/lib/cache";
-import type { PaymentMethod } from "./schemas";
+import type { LandingGrid, PaymentMethod } from "./schemas";
 
 /** Adresses factices : l'admin renseigne les vraies dans Settings. */
 const DEFAULT_PAYMENT_METHODS: PaymentMethod[] = [
@@ -11,6 +11,7 @@ const DEFAULT_PAYMENT_METHODS: PaymentMethod[] = [
 ];
 
 export const SETTING_DEFAULTS = {
+  landingGrid: JSON.stringify({ title: "", subtitle: "", items: [] } satisfies LandingGrid),
   paymentMethods: JSON.stringify(DEFAULT_PAYMENT_METHODS),
   telegramFreeUrl: "https://t.me/+hsY3pNZY1EU1OGZk",
   telegramContactUrl: "https://t.me/CYBERAHCEO",
@@ -25,4 +26,8 @@ export const getSettings = cachedPublic("settings:all", async () => {
 
 export function parsePaymentMethods(raw: string): PaymentMethod[] {
   try { return JSON.parse(raw) as PaymentMethod[]; } catch { return DEFAULT_PAYMENT_METHODS; }
+}
+
+export function parseLandingGrid(raw: string): LandingGrid {
+  try { return JSON.parse(raw) as LandingGrid; } catch { return { title: "", subtitle: "", items: [] }; }
 }

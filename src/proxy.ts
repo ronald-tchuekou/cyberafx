@@ -18,7 +18,7 @@ export default clerkMiddleware(
         "script-src": isDev ? ["'unsafe-eval'"] : [],
         // Tailwind/Base UI/lightweight-charts posent des styles inline : autorisés pour les attributs et éléments <style>.
         "style-src": ["'unsafe-inline'"],
-        "img-src": ["'self'", "data:", "blob:", "https://img.clerk.com"],
+        "img-src": ["'self'", "data:", "blob:", "https:"],
         "font-src": ["'self'", "data:"],
         "connect-src": isDev ? ["'self'", "ws:", "wss:"] : ["'self'"],
         "object-src": ["'none'"],
