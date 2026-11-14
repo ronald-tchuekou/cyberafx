@@ -1,15 +1,20 @@
 import type { Metadata } from "next";
 import { PageHeader } from "@/components/shared/page-header";
 import { SettingsForm } from "@/features/settings/components/settings-form";
-import { getSettings } from "@/features/settings/queries";
+import { PaymentMethodsForm } from "@/features/settings/components/payment-methods-form";
+import { getSettings, parsePaymentMethods } from "@/features/settings/queries";
 
 export const metadata: Metadata = { title: "Settings" };
 
 export default async function SettingsAdmin() {
+  const settings = await getSettings();
   return (
     <>
-      <PageHeader title="Settings" description="Adresse de paiement USDT et liens publics." />
-      <SettingsForm values={await getSettings()} />
+      <PageHeader title="Settings" description="Moyens de paiement crypto et liens publics." />
+      <div className="space-y-6">
+        <PaymentMethodsForm methods={parsePaymentMethods(settings.paymentMethods)} />
+        <SettingsForm values={settings} />
+      </div>
     </>
   );
 }
